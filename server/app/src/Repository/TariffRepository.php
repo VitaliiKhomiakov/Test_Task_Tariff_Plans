@@ -9,7 +9,7 @@ class TariffRepository extends AbstractRepository
 {
     public function find(int $id): array
     {
-        $query = $this->queryBuilder()
+        $query = $this->query()
             ->prepare('SELECT * FROM `tariff` WHERE `id` = :id');
         $query->bindParam(':id', $id, PDO::PARAM_INT);
         $query->execute();

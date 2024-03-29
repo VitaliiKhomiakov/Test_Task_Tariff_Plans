@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 use Controller\HomeController;
+use Controller\TariffController;
 use Repository\TariffRepository;
 use Repository\TariffTypeRepository;
 use Service\MailService;
@@ -31,7 +32,8 @@ class App
 
         $router = new Router();
         $router->setContainer($container)
-            ->addRoute('/', HomeController::class);
+            ->addRoute('/', HomeController::class)
+            ->addRoute('/tariff', TariffController::class);
 
         $requestPath = $_SERVER['REQUEST_URI'];
         echo $router->handleRequest($requestPath)->json();

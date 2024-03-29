@@ -6,8 +6,8 @@ use System\Http\JsonResponse;
 
 abstract class AbstractController
 {
-    protected function json(array $data = []): JsonResponse
+    protected function json(array $data = [], int $status = 200): JsonResponse
     {
-        return new JsonResponse($data);
+        return new JsonResponse($data, $status);
     }
 }
