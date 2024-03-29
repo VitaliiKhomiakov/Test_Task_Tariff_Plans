@@ -6,6 +6,7 @@ use Repository\TariffRepository;
 use Repository\TariffTypeRepository;
 use Service\DTO\TariffDTO;
 use System\Container\DependencyContainer;
+use Util\TariffDescriptionHandler;
 
 class TariffService
 {
@@ -41,33 +42,10 @@ class TariffService
 
     public function processTariff(TariffDTO $data): TariffDTO
     {
-        $description = $this->processObsceneWords([], $data->description);
-        $description = $this->processImages($description);
-        $data->description = $this->processLinks($description);
+        $descriptionHandler = new TariffDescriptionHandler();
+        $description = $descriptionHandler->processObsceneWords([], $data->description);
+        $description = $descriptionHandler->processImages($description);
+        $data->description = $descriptionHandler->processLinks($description);
         return $data;
     }
-
-    public function processObsceneWords(array $obsceneWords, string $text): string
-    {
-        $obsceneWords = array("badword1", "badword2", "badword3");
-
-        $text = "Это текст с матерными словами: badword1, а также с <img src='image.jpg'> тэгом img и URL: https://example.com.";
-
-        foreach ($obsceneWords as $word) {
-            $text = preg_replace("/\b" . $word . "\b/iu", "...", $text);
-        }
-
-        return $text;
-    }
-
-    public function processImages(string $text): string
-    {
-        return preg_replace('/<img[^>]+\>/i', '', $text);
-    }
-
-    public function processLinks(string $text): string
-    {
-        return $description = preg_replace('/(http[s]?:\/\/\S+)/', '<a href=\"$1\">$1</a>', $text);
-    }
-
 }
