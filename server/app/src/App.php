@@ -2,8 +2,10 @@
 
 use Controller\HomeController;
 use Controller\TariffController;
+use Repository\LogRepository;
 use Repository\TariffRepository;
 use Repository\TariffTypeRepository;
+use Service\LogService;
 use Service\MailService;
 use Service\TariffService;
 use System\Container\DependencyContainer;
@@ -26,8 +28,10 @@ class App
         $container->bind(Connection::class, new ConnectionDTO(Config::DB()))
             ->bind(TariffRepository::class, $container->get(Connection::class))
             ->bind(TariffTypeRepository::class, $container->get(Connection::class))
+            ->bind(LogRepository::class, $container->get(Connection::class))
             ->bind(TariffService::class, $container)
             ->bind(MailService::class, $container)
+            ->bind(LogService::class, $container)
             ->bind(Request::class, []);
 
         $router = new Router();

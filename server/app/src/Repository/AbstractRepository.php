@@ -11,7 +11,7 @@ abstract class AbstractRepository
 
     public function __construct(private readonly Connection $container) {}
 
-    public function query(): PDO
+    protected function query(): PDO
     {
         return $this->connection ??= $this->container->getConnection();
     }
