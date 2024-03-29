@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace System\Database;
+namespace System\Database\DTO;
 
 class ConnectionDTO
 {

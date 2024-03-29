@@ -2,12 +2,14 @@
 
 namespace Controller;
 
+use Service\DTO\TariffDTO;
 use Service\TariffService;
 use System\Container\DependencyContainer;
 use System\Http\JsonResponse;
 use System\Http\Request;
 use System\Http\Response;
 use System\Routing\Route;
+use Validator\Request\TariffValidator;
 
 final class TariffController extends AbstractController
 {
@@ -16,19 +18,20 @@ final class TariffController extends AbstractController
 
     public function __construct(private DependencyContainer $container)
     {
-        $this->tariffService = $container->get(TariffService::class);
-        $this->request = $container->get(Request::class);
+        $this->tariffService = $this->container->get(TariffService::class);
+        $this->request = $this->container->get(Request::class);
     }
 
     #[Route('/tariff', method: 'GET')]
     public function find(): JsonResponse
     {
         if (!($id = (int)$this->request->get('id') ?? 0)) {
-            $this->json(['Incorrect Id'], Response::CODE_ERROR);
+            return $this->json(['errors' => ['Incorrect Id']], Response::CODE_ERROR);
         }
 
-        $items = $this->tariffService->find($id);
-
+        if (!($items = $this->tariffService->find($id))) {
+            return $this->json(['errors' => ['Not Found']], Response::CODE_NOT_FOUND);
+        }
 
         return $this->json([
             'items' => $items
@@ -36,9 +39,23 @@ final class TariffController extends AbstractController
     }
 
     #[Route('/tariff', method: 'POST')]
-    public function create()
+    public function create(): JsonResponse
     {
+        $tariffData = $this->request->all();
 
+        if ($errors = (new TariffValidator())->validate($this->request->all())) {
+            return $this->json(['errors' => $errors], Response::CODE_ERROR);
+        }
+
+        try {
+            $tariff = $this->tariffService->create(new TariffDTO($tariffData));
+        } catch (\Exception $exception) {
+            return $this->json(['errors' => $exception->getMessage()], Response::CODE_ERROR);
+        }
+
+        return $this->json([
+            'id' => $tariff
+        ], Response::CODE_CREATED);
     }
 
     #[Route('/tariff', method: 'PUT')]

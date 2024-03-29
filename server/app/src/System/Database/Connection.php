@@ -4,6 +4,7 @@ namespace System\Database;
 
 use PDO;
 use PDOException;
+use System\Database\DTO\ConnectionDTO;
 
 final class Connection
 {

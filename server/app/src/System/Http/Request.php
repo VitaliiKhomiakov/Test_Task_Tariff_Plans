@@ -10,12 +10,9 @@ final class Request
     public function __construct()
     {
         $this->queryParams = $_GET;
-
-        $inputContent = [];
-        $inputData = file_get_contents('php://input');
-        parse_str($inputData, $inputContent);
-
-        $this->request = [...$_POST, ...$inputContent];
+        $input = file_get_contents('php://input');
+        $inputData = json_decode($input, true) ?? [];
+        $this->request = [...$_POST, ...$inputData];
     }
 
     public function get(string $key)

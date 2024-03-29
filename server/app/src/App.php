@@ -8,7 +8,7 @@ use Service\MailService;
 use Service\TariffService;
 use System\Container\DependencyContainer;
 use System\Database\Connection;
-use System\Database\ConnectionDTO;
+use System\Database\DTO\ConnectionDTO;
 use System\Http\Request;
 use System\Routing\Router;
 
