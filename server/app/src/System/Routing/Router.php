@@ -63,9 +63,8 @@ class Router
             $routeAttribute = $attribute->newInstance();
 
             if ($routeAttribute->matches($path, $_SERVER['REQUEST_METHOD'])) {
-                $instance = $reflection->newInstance();
-
-                if (method_exists($instance, '__construct')) {
+                if ($reflection->hasMethod('__construct')) {
+                    $instance = $reflection->newInstance($this->container);
                     $parameters = $method->getParameters();
                     foreach ($parameters as $parameter) {
                         if ($parameter->getType() && $parameter->getType()->getName() === DependencyContainer::class) {

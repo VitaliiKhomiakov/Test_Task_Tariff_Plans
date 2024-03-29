@@ -6,15 +6,9 @@ use System\Routing\Route;
 
 final class HomeController extends AbstractController
 {
-    #[Route('/catalog', method: 'POST')]
+    #[Route('/', method: 'GET')]
     public function index(): JsonResponse
     {
-        return $this->json(['id' => 'POST', 'data' => []]);
-    }
-
-    #[Route('/catalog', method: 'GET')]
-    public function index2(): JsonResponse
-    {
-        return $this->json(['id' => 'GET', 'data' => []]);
+        return $this->json(['status' => 'It works']);
     }
 }

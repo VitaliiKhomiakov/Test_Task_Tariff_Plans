@@ -17,3 +17,9 @@ COPY app/composer.json app/composer.lock ./
 RUN composer install
 
 CMD ["php-fpm"]
+
+
+#RUN apt-get update \
+#    && apt-get install -y libcurl4-openssl-dev pkg-config libssl-dev libzip-dev default-mysql-client \
+#    && docker-php-ext-install mysqli pdo zip pdo_mysql \
+#    && docker-php-ext-configure zip

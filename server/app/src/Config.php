@@ -2,12 +2,12 @@
 
 final class Config
 {
-    const DEBUG = false;
+    const DEBUG = true;
 
     const USER_DB = 'root';
     const PASS_DB = 'root_password';
     const DB_NAME = 'tariffs';
-    const DB_HOST = 'localhost';
+    const DB_HOST = 'database_tariffs';
 
     static function DB(): array
     {
