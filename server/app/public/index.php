@@ -1,3 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-echo 'OK';
+require_once '../autoload.php';
+
+(new App)->initialize();
+

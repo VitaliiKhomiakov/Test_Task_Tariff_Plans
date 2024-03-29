@@ -1,0 +1,18 @@
+{
+    "name": "root/tariffs",
+    "description": "Test task",
+    "autoload": {
+        "psr-4": {
+            "Root\\Tariffs\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Vitalii Khomiakov"
+        }
+    ],
+    "require": {
+        "symfony/validator": "^7.0.5",
+        "symfony/serializer": "^7.0"
+    }
+}

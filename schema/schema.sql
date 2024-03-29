@@ -1,0 +1,24 @@
+CREATE TABLE IF NOT EXISTS tariff_type (
+    id TINYINT(3) NOT NULL AUTO_INCREMENT,
+    code VARCHAR(100) DEFAULT NULL,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS tariff (
+    id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    type_id TINYINT(3) NOT NULL,
+    name VARCHAR(255) DEFAULT NULL,
+    price DECIMAL(10,2) DEFAULT 0,
+    description TEXT DEFAULT NULL,
+    is_active TINYINT(1) DEFAULT 0,
+    PRIMARY KEY (id),
+    KEY tariff_type_id_IDX (type_id),
+    CONSTRAINT fk_tariff_type_id FOREIGN KEY (type_id) REFERENCES tariff_type(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `log` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `data` JSON DEFAULT NULL,
+    `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
