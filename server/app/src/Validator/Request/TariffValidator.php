@@ -11,6 +11,10 @@ class TariffValidator extends AbstractValidator
     {
         $violations = $this->validator->validate($data, [
             new Assert\Collection([
+                'id' => new Assert\Optional([
+                    new Assert\Type(['type' => 'numeric']),
+                    new Assert\Positive(),
+                ]),
                 'typeId' => [
                     new Assert\NotBlank(),
                     new Assert\Type(['type' => 'numeric']),

@@ -2,6 +2,7 @@
 
 namespace Service;
 
+use Model\Tariff;
 use Repository\TariffRepository;
 use Repository\TariffTypeRepository;
 use Service\DTO\TariffDTO;
@@ -25,16 +26,14 @@ class TariffService
         $this->logService = $this->container->get(LogService::class);
     }
 
-    public function find(int $id): array
+    public function find(int $id): Tariff
     {
         return $this->tariffRepository->find($id);
     }
 
     public function create(TariffDTO $data): int
     {
-        if (!$this->tariffTypeRepository->find($data->typeId)) {
-            throw new \Exception('Tariff type is not exist');
-        }
+        $this->checkTariffType($data->typeId);
 
         $data = $this->processTariff($data);
         $tariffId = $this->tariffRepository->create($data);
@@ -45,6 +44,23 @@ class TariffService
         return $tariffId;
     }
 
+    public function update(int $id, TariffDTO $data): bool
+    {
+        $this->checkTariffType($data->typeId);
+
+        $data = $this->processTariff($data);
+        $result = $this->tariffRepository->update($id, $data);
+
+        $this->logService->create(['message' => 'Tariff name ' . $data->name . ' with Id ' . $id . ' has been updated']);
+
+        return $result;
+    }
+
+    public function delete(int $id): bool
+    {
+        return $this->tariffRepository->delete($id);
+    }
+
     public function processTariff(TariffDTO $data): TariffDTO
     {
         $descriptionHandler = new TariffDescriptionHandler();
@@ -52,5 +68,12 @@ class TariffService
         $description = $descriptionHandler->processImages($description);
         $data->description = $descriptionHandler->processLinks($description);
         return $data;
+    }
+
+    private function checkTariffType(int $typeId): void
+    {
+        if (!$this->tariffTypeRepository->find($typeId)) {
+            throw new \Exception('Tariff type is not exist');
+        }
     }
 }

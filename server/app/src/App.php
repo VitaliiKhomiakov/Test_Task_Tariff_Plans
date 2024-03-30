@@ -38,11 +38,16 @@ class App
             ->bind(ObsceneWordService::class, $container)
             ->bind(Request::class, []);
 
-        $router = new Router($container);
-        $router->addRoute('/', HomeController::class)
-            ->addRoute('/tariff', TariffController::class);
+        try {
+            $router = new Router($container);
+            $router->addRoute('/', HomeController::class)
+                ->addRoute('/tariff', TariffController::class);
 
-        $requestPath = $_SERVER['REQUEST_URI'];
-        echo $router->handleRequest($requestPath)->json();
+            $requestPath = $_SERVER['REQUEST_URI'];
+            echo $router->handleRequest($requestPath)->json();
+        } catch (\Exception $exception) {
+            http_response_code(\System\Http\Response::CODE_SERVER_ERROR);
+            echo $exception->getMessage();
+        }
     }
 }

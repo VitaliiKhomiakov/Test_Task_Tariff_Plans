@@ -2,7 +2,7 @@
 
 namespace Repository;
 
-use ObsceneWord;
+use Model\ObsceneWord;
 use PDO;
 
 class ObsceneWordRepository extends AbstractRepository
