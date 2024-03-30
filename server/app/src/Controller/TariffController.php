@@ -37,7 +37,7 @@ final class TariffController extends AbstractController
         }
 
         return $this->json([
-            'item' => $item
+            'item' => $item->getId() ? $item : []
         ]);
     }
 

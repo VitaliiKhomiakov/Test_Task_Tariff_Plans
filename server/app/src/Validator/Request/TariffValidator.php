@@ -34,8 +34,8 @@ class TariffValidator extends AbstractValidator
                     new Assert\Positive(),
                 ],
                 'is_active' => [
-                    new Assert\NotBlank(),
                     new Assert\Type(['type' => 'bool']),
+                    new Assert\Choice([true, false]),
                 ],
             ])
         ]);

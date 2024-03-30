@@ -15,7 +15,7 @@ class TariffRepository extends AbstractRepository
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        return new Tariff($stmt->fetch(PDO::FETCH_ASSOC));
+        return new Tariff($stmt->fetch(PDO::FETCH_ASSOC) ?: []);
     }
 
     public function create(TariffDTO $tariffDTO): int
