@@ -2,14 +2,12 @@
 
 namespace Util;
 
-class TariffDescriptionHandler
+use Util\Interface\DescriptionHandlerInterface;
+
+class TariffDescriptionHandler implements DescriptionHandlerInterface
 {
     public function processObsceneWords(array $obsceneWords, string $text): string
     {
-        $obsceneWords = array("badword1", "badword2", "badword3");
-
-        $text = "Это текст с матерными словами: badword1, а также с <img src='image.jpg'> тэгом img и URL: https://example.com.";
-
         foreach ($obsceneWords as $word) {
             $text = preg_replace("/\b" . $word . "\b/iu", "...", $text);
         }
@@ -24,6 +22,6 @@ class TariffDescriptionHandler
 
     public function processLinks(string $text): string
     {
-        return $description = preg_replace('/(http[s]?:\/\/\S+)/', '<a href=\"$1\">$1</a>', $text);
+        return preg_replace('/(http[s]?:\/\/\S+)/', '<a href=\"$1\">$1</a>', $text);
     }
 }

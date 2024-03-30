@@ -4,17 +4,13 @@ namespace System\Routing;
 
 use System\Container\DependencyContainer;
 use System\Http\JsonResponse;
+use System\Http\Response;
 
 class Router
 {
     private array $routes = [];
-    private DependencyContainer $container;
 
-    public function setContainer(DependencyContainer $container): self
-    {
-        $this->container = $container;
-        return $this;
-    }
+    public function __construct(private DependencyContainer $container) {}
 
     public function addRoute(string $path, string $controller): self
     {
@@ -67,7 +63,6 @@ class Router
 
     private function notFound(string $message = ''): JsonResponse
     {
-        http_response_code(404);
-        return new JsonResponse(['error' => $message]);
+        return new JsonResponse(['error' => $message], Response::CODE_NOT_FOUND);
     }
 }

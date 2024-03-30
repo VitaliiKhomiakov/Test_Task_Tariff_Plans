@@ -1,8 +1,11 @@
 CREATE TABLE IF NOT EXISTS tariff_type (
     id TINYINT(3) NOT NULL AUTO_INCREMENT,
     code VARCHAR(100) DEFAULT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    UNIQUE (code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO tariff_type (code) VALUES ('free'), ('pro'), ('business');
 
 CREATE TABLE IF NOT EXISTS tariff (
     id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -22,3 +25,11 @@ CREATE TABLE IF NOT EXISTS `log` (
     `date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE IF NOT EXISTS `obscene_word` (
+    `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO obscene_word (name) VALUES ('word1'), ('word2'), ('word3'), ('плохое слово1'), ('плохое слово2');

@@ -13,12 +13,14 @@ class TariffService
     private TariffRepository $tariffRepository;
     private TariffTypeRepository $tariffTypeRepository;
     private MailService $mailService;
+    private ObsceneWordService $obsceneWordService;
     private LogService $logService;
 
     public function __construct(private readonly DependencyContainer $container)
     {
         $this->tariffRepository = $this->container->get(TariffRepository::class);
         $this->tariffTypeRepository = $this->container->get(TariffTypeRepository::class);
+        $this->obsceneWordService = $this->container->get(ObsceneWordService::class);
         $this->mailService = $this->container->get(MailService::class);
         $this->logService = $this->container->get(LogService::class);
     }
@@ -46,7 +48,7 @@ class TariffService
     public function processTariff(TariffDTO $data): TariffDTO
     {
         $descriptionHandler = new TariffDescriptionHandler();
-        $description = $descriptionHandler->processObsceneWords([], $data->description);
+        $description= $this->obsceneWordService->filterObsceneWords($descriptionHandler, $data->description);
         $description = $descriptionHandler->processImages($description);
         $data->description = $descriptionHandler->processLinks($description);
         return $data;

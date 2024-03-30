@@ -19,7 +19,7 @@ class DependencyContainer
             return $this->instance($key);
         }
 
-        throw new \Exception('Unregistered repository');
+        throw new \Exception('Unregistered instance');
     }
 
     private function instance($key)

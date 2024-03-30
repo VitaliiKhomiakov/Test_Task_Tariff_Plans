@@ -3,10 +3,12 @@
 use Controller\HomeController;
 use Controller\TariffController;
 use Repository\LogRepository;
+use Repository\ObsceneWordRepository;
 use Repository\TariffRepository;
 use Repository\TariffTypeRepository;
 use Service\LogService;
 use Service\MailService;
+use Service\ObsceneWordService;
 use Service\TariffService;
 use System\Container\DependencyContainer;
 use System\Database\Connection;
@@ -28,15 +30,16 @@ class App
         $container->bind(Connection::class, new ConnectionDTO(Config::DB()))
             ->bind(TariffRepository::class, $container->get(Connection::class))
             ->bind(TariffTypeRepository::class, $container->get(Connection::class))
+            ->bind(ObsceneWordRepository::class, $container->get(Connection::class))
             ->bind(LogRepository::class, $container->get(Connection::class))
             ->bind(TariffService::class, $container)
             ->bind(MailService::class, $container)
             ->bind(LogService::class, $container)
+            ->bind(ObsceneWordService::class, $container)
             ->bind(Request::class, []);
 
-        $router = new Router();
-        $router->setContainer($container)
-            ->addRoute('/', HomeController::class)
+        $router = new Router($container);
+        $router->addRoute('/', HomeController::class)
             ->addRoute('/tariff', TariffController::class);
 
         $requestPath = $_SERVER['REQUEST_URI'];
