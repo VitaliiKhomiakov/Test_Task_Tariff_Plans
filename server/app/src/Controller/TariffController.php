@@ -65,6 +65,10 @@ final class TariffController extends AbstractController
     public function update(): JsonResponse
     {
         $id = (int)$this->request->get('id');
+        if ($errors = (new TariffIdValidator())->validate($id)) {
+            return $this->json(['errors' => $errors], Response::CODE_ERROR);
+        }
+
         $tariffData = $this->request->all();
 
         if ($errors = (new TariffValidator())->validate($tariffData)) {
