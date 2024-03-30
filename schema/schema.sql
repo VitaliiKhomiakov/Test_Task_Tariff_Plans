@@ -32,4 +32,4 @@ CREATE TABLE IF NOT EXISTS `obscene_word` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-INSERT INTO obscene_word (name) VALUES ('word1'), ('word2'), ('word3'), ('плохое слово1'), ('плохое слово2');
+INSERT INTO obscene_word (name) VALUES ('bad_word1'), ('bad_word2'), ('bad_word3'), ('плохое слово1'), ('плохое слово2');
