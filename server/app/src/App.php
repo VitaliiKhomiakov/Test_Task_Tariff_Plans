@@ -2,6 +2,7 @@
 
 use Controller\HomeController;
 use Controller\TariffController;
+use Notification\Message;
 use Repository\LogRepository;
 use Repository\ObsceneWordRepository;
 use Repository\TariffRepository;
@@ -36,7 +37,8 @@ class App
             ->bind(MailService::class, $container)
             ->bind(LogService::class, $container)
             ->bind(ObsceneWordService::class, $container)
-            ->bind(Request::class, []);
+            ->bind(Request::class, [])
+            ->bind(Message::class, []);
 
         try {
             $router = new Router($container);

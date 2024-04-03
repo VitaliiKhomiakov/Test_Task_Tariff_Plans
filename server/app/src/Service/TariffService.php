@@ -3,6 +3,7 @@
 namespace Service;
 
 use Model\Tariff;
+use Notification\Message;
 use Repository\TariffRepository;
 use Repository\TariffTypeRepository;
 use Service\DTO\TariffDTO;
@@ -16,6 +17,7 @@ class TariffService
     private MailService $mailService;
     private ObsceneWordService $obsceneWordService;
     private LogService $logService;
+    private Message $notification;
 
     public function __construct(private readonly DependencyContainer $container)
     {
@@ -24,6 +26,7 @@ class TariffService
         $this->obsceneWordService = $this->container->get(ObsceneWordService::class);
         $this->mailService = $this->container->get(MailService::class);
         $this->logService = $this->container->get(LogService::class);
+        $this->notification = $this->container->get(Message::class);
     }
 
     public function find(int $id): Tariff
@@ -38,7 +41,7 @@ class TariffService
         $data = $this->processTariff($data);
         $tariffId = $this->tariffRepository->create($data);
 
-        $this->logService->create(['message' => 'Tariff name ' . $data->name . ' with Id ' . $tariffId . ' has been created']);
+        $this->logService->create(['message' => $this->notification->creteTariffMessage($data->name, $tariffId)]);
         $this->mailService->tariffNotification();
 
         return $tariffId;
@@ -51,7 +54,7 @@ class TariffService
         $data = $this->processTariff($data);
         $result = $this->tariffRepository->update($id, $data);
 
-        $this->logService->create(['message' => 'Tariff name ' . $data->name . ' with Id ' . $id . ' has been updated']);
+        $this->logService->create(['message' => $this->notification->updateTariffMessage($data->name, $id)]);
 
         return $result;
     }
@@ -73,7 +76,7 @@ class TariffService
     private function checkTariffType(int $typeId): void
     {
         if (!$this->tariffTypeRepository->find($typeId)) {
-            throw new \Exception('Tariff type is not exist');
+            throw new \Exception(Message::TARIFF_NOT_EXIST);
         }
     }
 }

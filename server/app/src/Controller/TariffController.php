@@ -2,6 +2,7 @@
 
 namespace Controller;
 
+use Notification\Message;
 use Service\DTO\TariffDTO;
 use Service\TariffService;
 use System\Container\DependencyContainer;
@@ -33,7 +34,7 @@ final class TariffController extends AbstractController
         }
 
         if (!($item = $this->tariffService->find($id))) {
-            return $this->json(['errors' => ['Not Found']], Response::CODE_NOT_FOUND);
+            return $this->json(['errors' => Message::NOT_FOUND], Response::CODE_NOT_FOUND);
         }
 
         return $this->json([
@@ -82,7 +83,7 @@ final class TariffController extends AbstractController
         }
 
         return $this->json([
-            'message' => 'Tariff has been updated'
+            'message' => Message::TARIFF_UPDATED
         ]);
     }
 
@@ -102,7 +103,7 @@ final class TariffController extends AbstractController
         }
 
         return $this->json([
-            'message' => 'Tariff has been deleted'
+            'message' => Message::TARIFF_DELETED
         ]);
     }
 }
