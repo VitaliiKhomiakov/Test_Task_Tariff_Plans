@@ -82,7 +82,7 @@ final class TariffController extends AbstractController
         }
 
         return $this->json([
-            'message' => 'Tariff has been update'
+            'message' => 'Tariff has been updated'
         ]);
     }
 
