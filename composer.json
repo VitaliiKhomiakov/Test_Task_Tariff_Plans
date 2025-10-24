@@ -3,8 +3,13 @@
     "description": "Test task",
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
-            "DTO\\": "src/DTO/",
+            "App\\Core\\": "src/App/Core/",
+            "App\\Container\\": "src/App/Container/",
+            "App\\Error\\": "src/App/Error/",
+            "App\\Routing\\": "src/App/Routing/",
+            "Application\\": "src/Application/",
+            "Domain\\": "src/Domain/",
+            "Infrastructure\\": "src/Infrastructure/",
             "Routes\\": "config/routes/",
             "Config\\Dependencies\\": "config/dependencies/",
             "": "src/"

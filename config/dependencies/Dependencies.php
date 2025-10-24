@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Config\Dependencies;
 
-use Notification\Message;
-use Repository\LogRepository;
-use Repository\ObsceneWordRepository;
-use Repository\TariffRepository;
-use Repository\TariffTypeRepository;
-use Service\LogService;
-use Service\MailService;
-use Service\ObsceneWordService;
-use Service\TariffService;
-use System\Container\DependencyContainer;
-use System\Database\Connection;
+use Infrastructure\Notification\Message;
+use Domain\Repository\LogRepository;
+use Domain\Repository\ObsceneWordRepository;
+use Domain\Repository\TariffRepository;
+use Domain\Repository\TariffTypeRepository;
+use Domain\Service\LogService;
+use Domain\Service\MailService;
+use Domain\Service\ObsceneWordService;
+use Domain\Service\TariffService;
+use App\Container\DependencyContainer;
+use Infrastructure\Database\Connection;
 
 final class Dependencies
 {

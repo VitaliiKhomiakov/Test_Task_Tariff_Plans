@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Routes;
 
-use Controller\HomeController;
-use Controller\TariffController;
-use System\Routing\Router;
+use Application\Controller\HomeController;
+use Application\Controller\TariffController;
+use App\Routing\Router;
 
 final class Routes
 {

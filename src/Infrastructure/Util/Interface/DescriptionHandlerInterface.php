@@ -1,0 +1,10 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Infrastructure\Util\Interface;
+
+interface DescriptionHandlerInterface
+{
+    public function processObsceneWords(array $obsceneWords, string $text): string;
+}
