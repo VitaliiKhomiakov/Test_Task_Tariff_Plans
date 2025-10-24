@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Validator;
 
@@ -9,6 +11,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 abstract class AbstractValidator
 {
     protected ValidatorInterface $validator;
+
     public function __construct()
     {
         $this->validator = Validation::createValidator();

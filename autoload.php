@@ -1,6 +1,8 @@
-<?php declare(strict_types=1);
+<?php
 
-spl_autoload_register(function ($className) {
+declare(strict_types=1);
+
+spl_autoload_register(static function (string $className) {
     $file = __DIR__ . '/src/' . str_replace('\\', '/', $className) . '.php';
 
     if (file_exists($file)) {
@@ -11,4 +13,5 @@ spl_autoload_register(function ($className) {
 if (file_exists(__DIR__ . '/vendor/autoload.php')) {
     require_once __DIR__ . '/vendor/autoload.php';
 }
+
 require_once __DIR__ . '/config/Config.php';

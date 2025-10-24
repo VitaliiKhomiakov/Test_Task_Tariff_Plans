@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Controller;
 
+use DTO\TariffDTO;
 use Notification\Message;
-use Service\DTO\TariffDTO;
 use Service\TariffService;
 use System\Container\DependencyContainer;
 use System\Http\JsonResponse;
@@ -18,7 +20,7 @@ final class TariffController extends AbstractController
     private TariffService $tariffService;
     private Request $request;
 
-    public function __construct(private DependencyContainer $container)
+    public function __construct(private readonly DependencyContainer $container)
     {
         $this->tariffService = $this->container->get(TariffService::class);
         $this->request = $this->container->get(Request::class);
@@ -27,9 +29,17 @@ final class TariffController extends AbstractController
     #[Route('/tariff', method: 'GET')]
     public function find(): JsonResponse
     {
-        $id = (int)$this->request->get('id');
+        $id = $this->request->get('id');
 
-        if ($errors = (new TariffIdValidator())->validate($id)) {
+        if ($id === null) {
+            $items = $this->tariffService->findAll();
+            return $this->json([
+                'items' => array_map(fn($item) => $item->toArray(), $items)
+            ]);
+        }
+
+        $id = (int)$id;
+        if ($errors = new TariffIdValidator()->validate($id)) {
             return $this->json(['errors' => $errors], Response::CODE_ERROR);
         }
 
@@ -38,7 +48,7 @@ final class TariffController extends AbstractController
         }
 
         return $this->json([
-            'item' => $item->getId() ? $item : []
+            'item' => $item->toArray()
         ]);
     }
 
@@ -47,7 +57,7 @@ final class TariffController extends AbstractController
     {
         $tariffData = $this->request->all();
 
-        if ($errors = (new TariffValidator())->validate($tariffData)) {
+        if ($errors = new TariffValidator()->validate($tariffData)) {
             return $this->json(['errors' => $errors], Response::CODE_ERROR);
         }
 
@@ -66,13 +76,13 @@ final class TariffController extends AbstractController
     public function update(): JsonResponse
     {
         $id = (int)$this->request->get('id');
-        if ($errors = (new TariffIdValidator())->validate($id)) {
+        if ($errors = new TariffIdValidator()->validate($id)) {
             return $this->json(['errors' => $errors], Response::CODE_ERROR);
         }
 
         $tariffData = $this->request->all();
 
-        if ($errors = (new TariffValidator())->validate($tariffData)) {
+        if ($errors = new TariffValidator()->validate($tariffData)) {
             return $this->json(['errors' => $errors], Response::CODE_ERROR);
         }
 
@@ -92,7 +102,7 @@ final class TariffController extends AbstractController
     {
         $id = (int)$this->request->get('id');
 
-        if ($errors = (new TariffIdValidator())->validate($id)) {
+        if ($errors = new TariffIdValidator()->validate($id)) {
             return $this->json(['errors' => $errors], Response::CODE_ERROR);
         }
 

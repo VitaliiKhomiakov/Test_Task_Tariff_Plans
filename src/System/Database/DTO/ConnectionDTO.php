@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace System\Database\DTO;
 
@@ -9,7 +11,8 @@ class ConnectionDTO
     public string $host;
     public string $databaseName;
 
-    public function __construct(array $options) {
+    public function __construct(array $options)
+    {
         $this->user = $options['user'];
         $this->pass = $options['pass'];
         $this->host = $options['host'];

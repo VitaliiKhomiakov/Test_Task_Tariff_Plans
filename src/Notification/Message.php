@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Notification;
 
@@ -9,7 +11,7 @@ class Message
     const string TARIFF_DELETED = 'Tariff has been deleted';
     const string TARIFF_NOT_EXIST = 'Tariff type is not exist';
 
-    public function creteTariffMessage(string $name, int $id): string
+    public function createTariffMessage(string $name, int $id): string
     {
         return 'Tariff name ' . $name . ' with Id ' . $id . ' has been created';
     }

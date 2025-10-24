@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace System\Http;
 
@@ -11,9 +13,12 @@ final class JsonResponse extends Response
 {
     public function json(): string
     {
-        header('Content-Type: application/json; charset=utf-8');
-        http_response_code($this->status);
+        if (!headers_sent()) {
+            header('Content-Type: application/json; charset=utf-8');
+            http_response_code($this->status);
+        }
+
         $serializer = new Serializer([new ObjectNormalizer()]);
-        return (new JsonEncode())->encode($serializer->normalize($this->data), JsonEncoder::FORMAT);
+        return new JsonEncode()->encode($serializer->normalize($this->data), JsonEncoder::FORMAT);
     }
 }

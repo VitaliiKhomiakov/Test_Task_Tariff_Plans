@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace System\Database;
 
@@ -18,14 +20,14 @@ final class Connection
     public function __construct(ConnectionDTO $options)
     {
         try {
-            $this->connect = new PDO('mysql:host='. $options->host .';dbname='. $options->databaseName,
+            $this->connect = new PDO(
+                'mysql:host=' . $options->host . ';dbname=' . $options->databaseName,
                 $options->user,
                 $options->pass,
                 $this->options
             );
             $this->connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        }
-        catch(PDOException $e) {
+        } catch (PDOException $e) {
             echo 'ERROR: ' . $e->getMessage();
             exit();
         }

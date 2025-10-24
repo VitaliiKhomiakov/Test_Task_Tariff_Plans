@@ -1,6 +1,8 @@
-<?php declare(strict_types=1);
+<?php
 
-require_once '../autoload.php';
+declare(strict_types=1);
 
-(new App)->initialize();
+require_once __DIR__ . '/../autoload.php';
+
+(new \App\App)->initialize();
 

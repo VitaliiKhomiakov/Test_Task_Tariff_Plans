@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Validator\Request;
 
@@ -7,7 +9,7 @@ use Validator\AbstractValidator;
 
 class TariffIdValidator extends AbstractValidator
 {
-    public function validate(int $id): array
+    public function validate(mixed $id): array
     {
         $violations = $this->validator->validate($id, [
             new Assert\NotBlank(),

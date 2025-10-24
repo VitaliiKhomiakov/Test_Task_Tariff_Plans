@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Repository;
 
@@ -7,13 +9,14 @@ use PDO;
 
 class TariffTypeRepository extends AbstractRepository
 {
-    public function find(int $id): array
+    public function find(int $id): ?TariffType
     {
         $stmt = $this->query()
             ->prepare('SELECT * FROM tariff_type WHERE id = :id');
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
 
-        return array_map(fn($item) => new TariffType($item), $stmt->fetchAll(PDO::FETCH_ASSOC));
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? new TariffType($result) : null;
     }
 }

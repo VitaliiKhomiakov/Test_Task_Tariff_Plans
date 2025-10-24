@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Repository;
 
@@ -20,6 +22,6 @@ class ObsceneWordRepository extends AbstractRepository
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
 
-        return array_map(fn($item) => new ObsceneWord($item), $stmt->fetchAll(PDO::FETCH_ASSOC));
+        return array_map(static fn($item) => new ObsceneWord($item), $stmt->fetchAll(PDO::FETCH_ASSOC));
     }
 }

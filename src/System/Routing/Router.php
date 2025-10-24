@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace System\Routing;
 
@@ -10,7 +12,7 @@ class Router
 {
     private array $routes = [];
 
-    public function __construct(private DependencyContainer $container) {}
+    public function __construct(private readonly DependencyContainer $container) {}
 
     public function addRoute(string $path, string $controller): self
     {
@@ -20,20 +22,37 @@ class Router
 
     public function handleRequest(string $requestUri): JsonResponse
     {
-        $path = parse_url($requestUri)['path'];
-        if (!isset($this->routes[$path])) {
+        $path = $this->extractPathFromUri($requestUri);
+
+        if (!$this->isRouteRegistered($path)) {
             return $this->notFound('Route not found');
         }
 
-        $controller = $this->routes[$path];
-
         try {
+            $controller = $this->routes[$path];
             $reflection = new \ReflectionClass($controller);
-            return $this->executeController($reflection, $path) ?? new JsonResponse([]);
+            $response = $this->executeController($reflection, $path);
+
+            return $response ?? new JsonResponse([]);
         } catch (\ReflectionException $e) {
-            http_response_code(400);
-            throw new \Exception($e->getMessage());
+            return $this->handleReflectionException($e);
         }
+    }
+
+    private function extractPathFromUri(string $requestUri): string
+    {
+        return parse_url($requestUri, PHP_URL_PATH) ?? '';
+    }
+
+    private function isRouteRegistered(string $path): bool
+    {
+        return isset($this->routes[$path]);
+    }
+
+    private function handleReflectionException(\ReflectionException $e): JsonResponse
+    {
+        http_response_code(400);
+        return new JsonResponse(['error' => $e->getMessage()], Response::CODE_ERROR);
     }
 
     private function executeController(\ReflectionClass $reflection, string $path): ?JsonResponse
@@ -41,24 +60,38 @@ class Router
         $methods = $reflection->getMethods();
 
         foreach ($methods as $method) {
-            $attributes = $method->getAttributes(Route::class);
+            $routeAttribute = $this->findMatchingRouteAttribute($method, $path);
 
-            if (!empty($attributes)) {
-                foreach ($attributes as $attribute) {
-                    $routeAttribute = $attribute->newInstance();
-                    if ($routeAttribute->matches($path, $_SERVER['REQUEST_METHOD'])) {
-                        if ($reflection->hasMethod('__construct')) {
-                            $instance = $reflection->newInstance($this->container);
-                            $instance->__construct($this->container);
-                        }
-
-                        return $routeAttribute->execute($method, $instance ?? null);
-                    }
-                }
+            if ($routeAttribute !== null) {
+                $instance = $this->createControllerInstance($reflection);
+                return $routeAttribute->execute($method, $instance);
             }
         }
 
         return null;
+    }
+
+    private function findMatchingRouteAttribute(\ReflectionMethod $method, string $path): ?Route
+    {
+        $attributes = $method->getAttributes(Route::class);
+
+        foreach ($attributes as $attribute) {
+            $routeAttribute = $attribute->newInstance();
+            if ($routeAttribute instanceof Route && $routeAttribute->matches($path, $_SERVER['REQUEST_METHOD'] ?? 'GET')) {
+                return $routeAttribute;
+            }
+        }
+
+        return null;
+    }
+
+    private function createControllerInstance(\ReflectionClass $reflection): object
+    {
+        if ($reflection->hasMethod('__construct')) {
+            return $reflection->newInstance($this->container);
+        }
+
+        return $reflection->newInstance();
     }
 
     private function notFound(string $message = ''): JsonResponse

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace System\Routing;
 
@@ -12,7 +14,7 @@ final readonly class Route
         return rtrim($requestPath, '/') === rtrim($this->path, '/') && $requestMethod === $this->method;
     }
 
-    public function execute(\ReflectionMethod $method, object $instance)
+    public function execute(\ReflectionMethod $method, object $instance): mixed
     {
         return $method->invoke($instance);
     }

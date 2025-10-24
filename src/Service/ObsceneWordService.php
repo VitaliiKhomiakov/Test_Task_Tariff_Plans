@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Service;
 
@@ -8,7 +10,7 @@ use Util\Interface\DescriptionHandlerInterface;
 
 class ObsceneWordService
 {
-    const int OBSCENE_WORDS_LIMIT = 50;
+    private const int OBSCENE_WORDS_LIMIT = 50;
 
     private ObsceneWordRepository $obsceneWordRepository;
 
@@ -23,7 +25,7 @@ class ObsceneWordService
 
         while ($words = $this->obsceneWordRepository->findBy($lastId, self::OBSCENE_WORDS_LIMIT)) {
             $text= $descriptionHandler->processObsceneWords(
-                array_map(fn($item) => $item->getName(), $words),
+                array_map(static fn($item) => $item->getName(), $words),
                 $text
             );
             $lastId = end($words)->getId();

@@ -3,7 +3,11 @@
     "description": "Test task",
     "autoload": {
         "psr-4": {
-            "Root\\Tariffs\\": "src/"
+            "App\\": "src/",
+            "DTO\\": "src/DTO/",
+            "Routes\\": "config/routes/",
+            "Config\\Dependencies\\": "config/dependencies/",
+            "": "src/"
         }
     },
     "authors": [
@@ -16,6 +20,9 @@
         "symfony/validator": "^7.0.5",
         "symfony/serializer": "^7.0",
         "symfony/property-access": "^7.0"
+    },
+    "require-dev": {
+      "roave/security-advisories": "dev-latest"
     },
     "config": {
         "optimize-autoloader": true,

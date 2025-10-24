@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 final class Config
 {
-    const DEBUG = true;
+    public const bool DEBUG = true;
 
-    const USER_DB = 'root';
-    const PASS_DB = 'root_password';
-    const DB_NAME = 'tariffs';
-    const DB_HOST = 'database_tariffs';
+    private const string USER_DB = 'root';
+    private const string PASS_DB = 'root_password';
+    private const string DB_NAME = 'tariffs';
+    private const string DB_HOST = 'database_tariffs';
 
-    static function DB(): array
+    public static function DB(): array
     {
         return [
             'user' => self::USER_DB,
@@ -19,5 +21,7 @@ final class Config
         ];
     }
 
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 }

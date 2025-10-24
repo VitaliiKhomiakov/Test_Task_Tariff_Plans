@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Service;
 
-use Service\DTO\MailDTO;
+use DTO\MailDTO;
 
 class MailService
 {
-    public function send(MailDTO $mailDTO)
+    public function send(MailDTO $mailDTO): void
     {
         /*
          * ...

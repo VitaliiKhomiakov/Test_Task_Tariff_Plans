@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Service;
 
+use DTO\TariffDTO;
 use Model\Tariff;
 use Notification\Message;
 use Repository\TariffRepository;
 use Repository\TariffTypeRepository;
-use Service\DTO\TariffDTO;
 use System\Container\DependencyContainer;
 use Util\TariffDescriptionHandler;
 
@@ -29,9 +31,18 @@ class TariffService
         $this->notification = $this->container->get(Message::class);
     }
 
-    public function find(int $id): Tariff
+    public function find(int $id): ?Tariff
     {
-        return $this->tariffRepository->find($id);
+        try {
+            return $this->tariffRepository->find($id);
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    public function findAll(): array
+    {
+        return $this->tariffRepository->findAll();
     }
 
     public function create(TariffDTO $data): int
@@ -41,7 +52,7 @@ class TariffService
         $data = $this->processTariff($data);
         $tariffId = $this->tariffRepository->create($data);
 
-        $this->logService->create(['message' => $this->notification->creteTariffMessage($data->name, $tariffId)]);
+        $this->logService->create(['message' => $this->notification->createTariffMessage($data->name, $tariffId)]);
         $this->mailService->tariffNotification();
 
         return $tariffId;
@@ -54,6 +65,10 @@ class TariffService
         $data = $this->processTariff($data);
         $result = $this->tariffRepository->update($id, $data);
 
+        if (!$result) {
+            throw new \Exception('Tariff not found');
+        }
+
         $this->logService->create(['message' => $this->notification->updateTariffMessage($data->name, $id)]);
 
         return $result;
@@ -61,7 +76,13 @@ class TariffService
 
     public function delete(int $id): bool
     {
-        return $this->tariffRepository->delete($id);
+        $result = $this->tariffRepository->delete($id);
+        
+        if (!$result) {
+            throw new \Exception('Tariff not found');
+        }
+        
+        return $result;
     }
 
     public function processTariff(TariffDTO $data): TariffDTO

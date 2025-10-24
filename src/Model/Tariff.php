@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Model;
 
@@ -13,12 +15,12 @@ final class Tariff
 
     public function __construct(array $data)
     {
-        $this->id = (int)($data['id'] ?? 0);;
+        $this->id = (int)($data['id'] ?? 0);
         $this->typeId = (int)($data['type_id'] ?? 0);
         $this->name = $data['name'] ?? '';
         $this->price = (float)($data['price'] ?? 0);
         $this->description = $data['description'] ?? '';
-        $this->isActive = !!($data['is_active'] ?? false);
+        $this->isActive = (bool)($data['is_active'] ?? false);
     }
 
     public function getId(): int
@@ -49,5 +51,17 @@ final class Tariff
     public function isActive(): bool
     {
         return $this->isActive;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'typeId' => $this->typeId,
+            'name' => $this->name,
+            'price' => $this->price,
+            'description' => $this->description,
+            'isActive' => $this->isActive,
+        ];
     }
 }
