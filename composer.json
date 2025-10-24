@@ -1,0 +1,24 @@
+{
+    "name": "root/tariffs",
+    "description": "Test task",
+    "autoload": {
+        "psr-4": {
+            "Root\\Tariffs\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Vitalii Khomiakov"
+        }
+    ],
+    "require": {
+        "php": "^8.4",
+        "symfony/validator": "^7.0.5",
+        "symfony/serializer": "^7.0",
+        "symfony/property-access": "^7.0"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

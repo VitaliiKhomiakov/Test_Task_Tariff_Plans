@@ -1,0 +1,225 @@
+### Test Task: Tariff Plans API
+### Base URL: http://localhost:31
+
+### 1. Create Tariff Plan
+POST http://localhost:31/tariff
+Content-Type: application/json
+
+{
+    "typeId": 1,
+    "name": "Basic Plan",
+    "description": "Basic tariff plan with essential features https://ya.ru/ <img src=\"https://images.pexels.com/photos/18254876/pexels-photo-18254876.jpeg\"> word1 word2 текст текст плохое слово1 плохое слово2 описание",
+    "price": 10.99,
+    "is_active": true
+}
+
+###
+
+### 2. Create Premium Tariff Plan
+POST http://localhost:31/tariff
+Content-Type: application/json
+
+{
+    "typeId": 2,
+    "name": "Premium Plan",
+    "description": "Premium tariff with advanced features https://example.com/ <img src=\"https://images.pexels.com/photos/18254876/pexels-photo-18254876.jpeg\"> additional features premium support",
+    "price": 29.99,
+    "is_active": true
+}
+
+###
+
+### 3. Get Tariff by ID
+GET http://localhost:31/tariff?id=1
+
+###
+
+### 4. Get All Tariffs
+GET http://localhost:31/tariff
+
+###
+
+### 5. Update Tariff Plan
+PUT http://localhost:31/tariff?id=1
+Content-Type: application/json
+
+{
+    "id": 1,
+    "typeId": 1,
+    "name": "Updated Basic Plan",
+    "description": "Updated basic tariff plan with new features https://ya.ru/ <img src=\"https://images.pexels.com/photos/18254876/pexels-photo-18254876.jpeg\"> word1 word2 текст текст плохое слово1 плохое слово2 описание",
+    "price": 15.99,
+    "is_active": false
+}
+
+###
+
+### 6. Update Premium Tariff Plan
+PUT http://localhost:31/tariff?id=2
+Content-Type: application/json
+
+{
+    "id": 2,
+    "typeId": 2,
+    "name": "Updated Premium Plan",
+    "description": "Updated premium tariff with enhanced features https://example.com/ <img src=\"https://images.pexels.com/photos/18254876/pexels-photo-18254876.jpeg\"> enhanced features premium support",
+    "price": 39.99,
+    "is_active": true
+}
+
+###
+
+### 7. Delete Tariff Plan
+DELETE http://localhost:31/tariff?id=1
+
+###
+
+### 8. Delete Premium Tariff Plan
+DELETE http://localhost:31/tariff?id=2
+
+###
+
+### 9. Test with Invalid Data - Missing Required Fields
+POST http://localhost:31/tariff
+Content-Type: application/json
+
+{
+    "name": "Invalid Plan"
+}
+
+###
+
+### 10. Test with Invalid Data - Negative Price
+POST http://localhost:31/tariff
+Content-Type: application/json
+
+{
+    "typeId": 1,
+    "name": "Invalid Price Plan",
+    "description": "Plan with negative price",
+    "price": -10.99,
+    "is_active": true
+}
+
+###
+
+### 11. Test with Invalid Data - Non-existent Type ID
+POST http://localhost:31/tariff
+Content-Type: application/json
+
+{
+    "typeId": 999,
+    "name": "Invalid Type Plan",
+    "description": "Plan with non-existent type",
+    "price": 10.99,
+    "is_active": true
+}
+
+###
+
+### 12. Test Get Non-existent Tariff
+GET http://localhost:31/tariff?id=999
+
+###
+
+### 13. Test Update Non-existent Tariff
+PUT http://localhost:31/tariff?id=999
+Content-Type: application/json
+
+{
+    "id": 999,
+    "typeId": 1,
+    "name": "Non-existent Plan",
+    "description": "This plan doesn't exist",
+    "price": 10.99,
+    "is_active": true
+}
+
+###
+
+### 14. Test Delete Non-existent Tariff
+DELETE http://localhost:31/tariff?id=999
+
+###
+
+### 15. Test with Empty Description
+POST http://localhost:31/tariff
+Content-Type: application/json
+
+{
+    "typeId": 1,
+    "name": "Empty Description Plan",
+    "description": "",
+    "price": 10.99,
+    "is_active": true
+}
+
+###
+
+### 16. Test with Very Long Description
+POST http://localhost:31/tariff
+Content-Type: application/json
+
+{
+    "typeId": 1,
+    "name": "Long Description Plan",
+    "description": "This is a very long description that contains many words and should test the system's ability to handle lengthy descriptions. It includes various elements like URLs https://example.com/ and images <img src=\"https://images.pexels.com/photos/18254876/pexels-photo-18254876.jpeg\"> and should properly process all the content including any obscene words that might be present in the text. The system should handle this gracefully and process the description according to the business rules.",
+    "price": 10.99,
+    "is_active": true
+}
+
+###
+
+### 17. Test with Special Characters in Name
+POST http://localhost:31/tariff
+Content-Type: application/json
+
+{
+    "typeId": 1,
+    "name": "Special Characters Plan !@#$%^&*()",
+    "description": "Plan with special characters in name",
+    "price": 10.99,
+    "is_active": true
+}
+
+###
+
+### 18. Test with Zero Price
+POST http://localhost:31/tariff
+Content-Type: application/json
+
+{
+    "typeId": 1,
+    "name": "Free Plan",
+    "description": "Free tariff plan",
+    "price": 0.00,
+    "is_active": true
+}
+
+###
+
+### 19. Test with Very High Price
+POST http://localhost:31/tariff
+Content-Type: application/json
+
+{
+    "typeId": 1,
+    "name": "Expensive Plan",
+    "description": "Very expensive tariff plan",
+    "price": 999999.99,
+    "is_active": true
+}
+
+###
+
+### 20. Test with Boolean Edge Cases
+POST http://localhost:31/tariff
+Content-Type: application/json
+
+{
+    "typeId": 1,
+    "name": "Inactive Plan",
+    "description": "Inactive tariff plan",
+    "price": 10.99,
+    "is_active": false
+}
