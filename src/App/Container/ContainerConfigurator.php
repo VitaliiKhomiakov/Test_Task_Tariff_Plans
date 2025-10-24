@@ -7,13 +7,15 @@ namespace App\Container;
 use Infrastructure\Database\Connection;
 use Infrastructure\Database\DTO\ConnectionDTO;
 use Infrastructure\Http\Request;
+use Infrastructure\Notification\Message;
 
 final class ContainerConfigurator
 {
     public function configure(DependencyContainer $container): DependencyContainer
     {
         $container->bind(Connection::class, new ConnectionDTO(\Config::DB()))
-                  ->bind(Request::class, []);
+                  ->bind(Request::class, [])
+                  ->bind(Message::class, []);
 
         \Config\Dependencies\Dependencies::configure($container);
 

@@ -10,25 +10,27 @@ use Infrastructure\Notification\Message;
 use Domain\Repository\TariffRepository;
 use Domain\Repository\TariffTypeRepository;
 use App\Container\DependencyContainer;
-use Infrastructure\Util\TariffDescriptionHandler;
+use Domain\Service\Interface\TariffServiceInterface;
+use Domain\Service\Interface\LogServiceInterface;
+use Domain\Service\Interface\MailServiceInterface;
 
-class TariffService
+final class TariffService implements TariffServiceInterface
 {
     private TariffRepository $tariffRepository;
     private TariffTypeRepository $tariffTypeRepository;
-    private MailService $mailService;
-    private ObsceneWordService $obsceneWordService;
-    private LogService $logService;
+    private MailServiceInterface $mailService;
+    private LogServiceInterface $logService;
     private Message $notification;
+    private TariffDescriptionService $descriptionService;
 
     public function __construct(private readonly DependencyContainer $container)
     {
         $this->tariffRepository = $this->container->get(TariffRepository::class);
         $this->tariffTypeRepository = $this->container->get(TariffTypeRepository::class);
-        $this->obsceneWordService = $this->container->get(ObsceneWordService::class);
         $this->mailService = $this->container->get(MailService::class);
         $this->logService = $this->container->get(LogService::class);
         $this->notification = $this->container->get(Message::class);
+        $this->descriptionService = $this->container->get(TariffDescriptionService::class);
     }
 
     public function find(int $id): ?Tariff
@@ -87,11 +89,7 @@ class TariffService
 
     public function processTariff(TariffDTO $data): TariffDTO
     {
-        $descriptionHandler = new TariffDescriptionHandler();
-        $description= $this->obsceneWordService->filterObsceneWords($descriptionHandler, $data->description);
-        $description = $descriptionHandler->processImages($description);
-        $data->description = $descriptionHandler->processLinks($description);
-        return $data;
+        return $this->descriptionService->processTariff($data);
     }
 
     private function checkTariffType(int $typeId): void

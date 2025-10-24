@@ -6,8 +6,9 @@ namespace Domain\Service;
 
 use Domain\Repository\LogRepository;
 use App\Container\DependencyContainer;
+use Domain\Service\Interface\LogServiceInterface;
 
-class LogService
+final class LogService implements LogServiceInterface
 {
     private LogRepository $logRepository;
 

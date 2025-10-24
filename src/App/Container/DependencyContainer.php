@@ -26,7 +26,18 @@ class DependencyContainer
 
     private function instance(string $key): mixed
     {
-        $this->instances[$key] ??= new $key($this->container[$key]);
+        if (isset($this->instances[$key])) {
+            return $this->instances[$key];
+        }
+
+        $params = $this->container[$key];
+        
+        if (is_array($params)) {
+            $this->instances[$key] = new $key(...$params);
+        } else {
+            $this->instances[$key] = new $key($params);
+        }
+        
         return $this->instances[$key];
     }
 }

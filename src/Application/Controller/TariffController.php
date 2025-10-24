@@ -19,37 +19,27 @@ final class TariffController extends AbstractController
 {
     private TariffService $tariffService;
     private Request $request;
+    private TariffIdValidator $tariffIdValidator;
+    private TariffValidator $tariffValidator;
 
     public function __construct(private readonly DependencyContainer $container)
     {
         $this->tariffService = $this->container->get(TariffService::class);
         $this->request = $this->container->get(Request::class);
+        $this->tariffIdValidator = new TariffIdValidator();
+        $this->tariffValidator = new TariffValidator();
     }
 
     #[Route('/tariff', method: 'GET')]
     public function find(): JsonResponse
     {
-        $id = $this->request->get('id');
+        $id = $this->getRequestId();
 
         if ($id === null) {
-            $items = $this->tariffService->findAll();
-            return $this->json([
-                'items' => array_map(fn($item) => $item->toArray(), $items)
-            ]);
+            return $this->getAllTariffs();
         }
 
-        $id = (int)$id;
-        if ($errors = new TariffIdValidator()->validate($id)) {
-            return $this->json(['errors' => $errors], Response::CODE_ERROR);
-        }
-
-        if (!($item = $this->tariffService->find($id))) {
-            return $this->json(['errors' => Message::NOT_FOUND], Response::CODE_NOT_FOUND);
-        }
-
-        return $this->json([
-            'item' => $item->toArray()
-        ]);
+        return $this->getTariffById($id);
     }
 
     #[Route('/tariff', method: 'POST')]
@@ -57,63 +47,82 @@ final class TariffController extends AbstractController
     {
         $tariffData = $this->request->all();
 
-        if ($errors = new TariffValidator()->validate($tariffData)) {
-            return $this->json(['errors' => $errors], Response::CODE_ERROR);
+        if ($errors = $this->tariffValidator->validate($tariffData)) {
+            return $this->errorResponse($errors);
         }
 
         try {
             $tariffId = $this->tariffService->create(new TariffDTO($tariffData));
+            return $this->successResponse(['id' => $tariffId], Response::CODE_CREATED);
         } catch (\Exception $exception) {
-            return $this->json(['errors' => $exception->getMessage()], Response::CODE_ERROR);
+            return $this->errorResponse([$exception->getMessage()]);
         }
-
-        return $this->json([
-            'id' => $tariffId
-        ], Response::CODE_CREATED);
     }
 
     #[Route('/tariff', method: 'PUT')]
     public function update(): JsonResponse
     {
-        $id = (int)$this->request->get('id');
-        if ($errors = new TariffIdValidator()->validate($id)) {
-            return $this->json(['errors' => $errors], Response::CODE_ERROR);
+        $id = $this->getRequestId();
+        if ($id === null) {
+            return $this->errorResponse(['ID is required']);
         }
 
         $tariffData = $this->request->all();
 
-        if ($errors = new TariffValidator()->validate($tariffData)) {
-            return $this->json(['errors' => $errors], Response::CODE_ERROR);
+        if ($errors = $this->tariffValidator->validate($tariffData)) {
+            return $this->errorResponse($errors);
         }
 
         try {
             $this->tariffService->update($id, new TariffDTO($tariffData));
+            return $this->successResponse(['message' => Message::TARIFF_UPDATED]);
         } catch (\Exception $exception) {
-            return $this->json(['errors' => $exception->getMessage()], Response::CODE_ERROR);
+            return $this->errorResponse([$exception->getMessage()]);
         }
-
-        return $this->json([
-            'message' => Message::TARIFF_UPDATED
-        ]);
     }
 
     #[Route('/tariff', method: 'DELETE')]
     public function delete(): JsonResponse
     {
-        $id = (int)$this->request->get('id');
-
-        if ($errors = new TariffIdValidator()->validate($id)) {
-            return $this->json(['errors' => $errors], Response::CODE_ERROR);
+        $id = $this->getRequestId();
+        if ($id === null) {
+            return $this->errorResponse(['ID is required']);
         }
 
         try {
             $this->tariffService->delete($id);
+            return $this->successResponse(['message' => Message::TARIFF_DELETED]);
         } catch (\Exception $exception) {
-            return $this->json(['errors' => $exception->getMessage()], Response::CODE_ERROR);
+            return $this->errorResponse([$exception->getMessage()]);
         }
+    }
 
-        return $this->json([
-            'message' => Message::TARIFF_DELETED
+    private function getRequestId(): ?int
+    {
+        $id = $this->request->get('id');
+        return $id ? (int)$id : null;
+    }
+
+    private function getAllTariffs(): JsonResponse
+    {
+        $items = $this->tariffService->findAll();
+        return $this->successResponse([
+            'items' => array_map(fn($item) => $item->toArray(), $items)
         ]);
     }
+
+    private function getTariffById(int $id): JsonResponse
+    {
+        if ($errors = $this->tariffIdValidator->validate($id)) {
+            return $this->errorResponse($errors);
+        }
+
+        $item = $this->tariffService->find($id);
+        if (!$item) {
+            return $this->errorResponse([Message::NOT_FOUND], Response::CODE_NOT_FOUND);
+        }
+
+        return $this->successResponse(['item' => $item->toArray()]);
+    }
+
 }

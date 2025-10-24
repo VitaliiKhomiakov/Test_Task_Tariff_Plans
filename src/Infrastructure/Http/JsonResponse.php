@@ -9,7 +9,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
-final class JsonResponse extends Response
+final class JsonResponse extends \Infrastructure\Http\Response
 {
     public function json(): string
     {

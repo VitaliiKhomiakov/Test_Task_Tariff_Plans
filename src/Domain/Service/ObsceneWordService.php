@@ -7,8 +7,9 @@ namespace Domain\Service;
 use Domain\Repository\ObsceneWordRepository;
 use App\Container\DependencyContainer;
 use Infrastructure\Util\Interface\DescriptionHandlerInterface;
+use Domain\Service\Interface\ObsceneWordServiceInterface;
 
-class ObsceneWordService
+final class ObsceneWordService implements ObsceneWordServiceInterface
 {
     private const int OBSCENE_WORDS_LIMIT = 50;
 

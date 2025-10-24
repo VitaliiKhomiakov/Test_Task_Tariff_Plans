@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Domain\Service;
 
 use Application\DTO\MailDTO;
+use Domain\Service\Interface\MailServiceInterface;
 
-class MailService
+final class MailService implements MailServiceInterface
 {
     public function send(MailDTO $mailDTO): void
     {

@@ -12,6 +12,6 @@ final class HomeController extends AbstractController
     #[Route('/', method: 'GET')]
     public function index(): JsonResponse
     {
-        return $this->json(['status' => 'It works']);
+        return $this->successResponse(['status' => 'It works']);
     }
 }
