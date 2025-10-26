@@ -24,10 +24,11 @@ Check the database schema in `schema/schema.sql`
 ## Usage
 To run the project, use the following command:
 ```
-docker-compose up -d
+docker compose up -d
 ```
+Use requests.http for real API testing.
 
-You can use a Postman (or other) or cUrl for testing
+You can also use a Postman (or other) or cUrl for testing
 
 Postman: `http://localhost:31/tariff` - main link
 
