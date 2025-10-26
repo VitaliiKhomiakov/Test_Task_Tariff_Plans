@@ -1,6 +1,7 @@
 # Test Task: Tariff plans
 
-The test task involves creating tariff plans, filtering obscene words, processing descriptions, adding logs when saving and sending messages to the administrator
+The test task involves creating tariff plans, filtering obscene words, processing descriptions, adding logs when saving and sending messages to the administrator.
+One of the requirements of the task is not to use a framework.
 
 ## How it Works
 
